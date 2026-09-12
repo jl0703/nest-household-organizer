@@ -194,6 +194,89 @@ class ChoreServiceTest {
     }
 
     @Test
+    fun `updateChore changes title, assignee, and recurrence`() {
+        val chore = choreService.createChore(
+            householdId,
+            owner.id,
+            CreateChoreRequest(
+                title = "Take out trash",
+                assigneeType = "adult",
+                assigneeUserId = member.id,
+                firstDueDate = LocalDate.of(2026, 1, 1),
+            )
+        )
+
+        val updated = choreService.updateChore(
+            chore.id,
+            householdId,
+            owner.id,
+            UpdateChoreRequest(
+                title = "Take out recycling",
+                assigneeType = "adult",
+                assigneeUserId = owner.id,
+                recurrenceFrequency = "weekly",
+                recurrenceInterval = 2,
+            )
+        )
+
+        assertEquals("Take out recycling", updated.title)
+        assertEquals(owner.id, updated.assigneeUserId)
+        assertEquals("weekly", updated.recurrenceFrequency)
+        assertEquals(2, updated.recurrenceInterval)
+    }
+
+    @Test
+    fun `updateChore fails when the new assignee is not a household member`() {
+        val chore = choreService.createChore(
+            householdId,
+            owner.id,
+            CreateChoreRequest(
+                title = "Take out trash",
+                assigneeType = "adult",
+                assigneeUserId = member.id,
+                firstDueDate = LocalDate.of(2026, 1, 1),
+            )
+        )
+
+        assertThrows<ChoreException> {
+            choreService.updateChore(
+                chore.id,
+                householdId,
+                owner.id,
+                UpdateChoreRequest(
+                    title = "Take out trash",
+                    assigneeType = "adult",
+                    assigneeUserId = outsider.id,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `updateChore denies cross-household access`() {
+        val otherHousehold = householdService.createHousehold(outsider, CreateHouseholdRequest("Other House"))
+        val chore = choreService.createChore(
+            householdId,
+            owner.id,
+            CreateChoreRequest(
+                title = "Take out trash",
+                assigneeType = "adult",
+                assigneeUserId = member.id,
+                firstDueDate = LocalDate.of(2026, 1, 1),
+            )
+        )
+
+        assertThrows<ChoreException> {
+            choreService.updateChore(
+                chore.id,
+                otherHousehold.id,
+                outsider.id,
+                UpdateChoreRequest(title = "Hijacked", assigneeType = "adult", assigneeUserId = outsider.id),
+            )
+        }
+    }
+
+    @Test
     fun `cross-household chore access is denied`() {
         val otherHousehold = householdService.createHousehold(outsider, CreateHouseholdRequest("Other House"))
         val chore = choreService.createChore(
