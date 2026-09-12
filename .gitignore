@@ -1,41 +1,53 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Root gitignore for household-organizer monorepo
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/coverage/
+frontend/.pnp
+frontend/.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+frontend/.vercel
 
-# testing
-/coverage
+# Backend (Micronaut/Gradle)
+backend/.gradle/
+backend/build/
+backend/target/
+backend/out/
+backend/.micronaut/
+backend/.kotlin/
 
-# next.js
-/.next/
-/out/
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.settings/
+.classpath
+.factorypath
+.vscode/
 
-# production
-/build
-
-# misc
-.DS_Store
+# Env & secrets
+.env
+.env.*
+!.env.example
 *.pem
 
-# debug
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
