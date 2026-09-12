@@ -36,9 +36,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
     runtimeOnly("org.flywaydb:flyway-database-postgresql")
     runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("tools.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     aotPlugins(platform("io.micronaut.platform:micronaut-platform:5.1.5"))
@@ -69,6 +71,12 @@ graalvmNative {
 
 
 
+
+allOpen {
+    annotation("io.micronaut.http.annotation.Controller")
+    annotation("io.micronaut.security.annotation.Secured")
+    annotation("jakarta.inject.Singleton")
+}
 
 micronaut {
     runtime("netty")

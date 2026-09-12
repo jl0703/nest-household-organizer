@@ -1,0 +1,7 @@
+# Activated when MICRONAUT_ENVIRONMENTS=docker (see docker-compose.yml).
+# Provides a real datasource URL so Testcontainers/test-resources auto-provisioning is bypassed.
+datasources:
+  default:
+    url: "${JDBC_URL:jdbc:postgresql://postgres:5432/household}"
+    username: "${DB_USER:household}"
+    password: "${DB_PASSWORD:household}"

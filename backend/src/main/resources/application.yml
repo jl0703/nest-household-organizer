@@ -1,0 +1,26 @@
+micronaut:
+  application:
+    name: household-api
+  security:
+    authentication: bearer
+  server:
+    cors:
+      enabled: true
+      configurations:
+        frontend:
+          allowed-origins:
+            - "${FRONTEND_ORIGIN:http://localhost:3000}"
+
+datasources:
+  default:
+    db-type: postgres
+    dialect: POSTGRES
+    driver-class-name: org.postgresql.Driver
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+
+supabase:
+  jwt-secret: "${SUPABASE_JWT_SECRET:replace-me-with-your-supabase-jwt-secret}"
