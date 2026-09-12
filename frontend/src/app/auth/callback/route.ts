@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 // Completes the OAuth (Google) sign-in flow: Supabase redirects here with a
 // `code` query param after the provider redirect, which we exchange for a
@@ -7,7 +8,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get("code");
-  const redirectTo = searchParams.get("redirectTo") || "/households/new";
+  const redirectTo = safeRedirectPath(searchParams.get("redirectTo"));
 
   if (code) {
     const supabase = await createSupabaseServerClient();

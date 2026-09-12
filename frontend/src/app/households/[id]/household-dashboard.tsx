@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import type { ChildProfile, Household, HouseholdMember, Invitation } from "@/lib/types";
 
@@ -21,6 +22,7 @@ export function HouseholdDashboard({
   initialChildren,
   currentUserId,
 }: HouseholdDashboardProps) {
+  const router = useRouter();
   const isOwner = household.ownerId === currentUserId;
 
   const [members, setMembers] = useState<HouseholdMember[]>(initialMembers);
@@ -151,8 +153,9 @@ export function HouseholdDashboard({
         return;
       }
 
-      setTransferSuccess("Ownership transferred. Reload the page to see the updated roles.");
+      setTransferSuccess("Ownership transferred.");
       setTransferTargetId("");
+      router.refresh();
     } catch {
       setTransferError("We couldn't reach the server. Check your connection and try again.");
     } finally {
