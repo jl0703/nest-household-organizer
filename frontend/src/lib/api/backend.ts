@@ -73,7 +73,7 @@ export async function backendFetch(
 
   let response: Response;
   try {
-    response = await fetch(`${backendUrl}${path}`, { ...init, headers, body });
+    response = await fetch(`${backendUrl}/api${path}`, { ...init, headers, body });
   } catch {
     return NextResponse.json(
       { error: "Unable to reach the household service" },
@@ -115,7 +115,7 @@ export async function backendJson<T>(path: string, init: BackendRequestInit = {}
     body = JSON.stringify(init.body);
   }
 
-  const response = await fetch(`${backendUrl}${path}`, {
+  const response = await fetch(`${backendUrl}/api${path}`, {
     ...init,
     headers,
     body,

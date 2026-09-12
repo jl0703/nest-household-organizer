@@ -78,7 +78,7 @@ describe("backendFetch", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0];
-    expect(url).toBe("http://backend.test/households");
+    expect(url).toBe("http://backend.test/api/households");
     expect(init.method).toBe("POST");
     expect((init.headers as Headers).get("Authorization")).toBe("Bearer token-123");
     expect(init.body).toBe(JSON.stringify({ name: "The Hollows", timezone: "UTC" }));

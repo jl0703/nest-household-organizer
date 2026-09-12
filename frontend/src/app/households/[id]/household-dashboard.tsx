@@ -23,7 +23,7 @@ export function HouseholdDashboard({
 }: HouseholdDashboardProps) {
   const isOwner = household.ownerId === currentUserId;
 
-  const [members] = useState<HouseholdMember[]>(initialMembers);
+  const [members, setMembers] = useState<HouseholdMember[]>(initialMembers);
   const [children, setChildren] = useState<ChildProfile[]>(initialChildren);
   // Invitations sent this session. The backend does not expose a "list
   // pending invitations" endpoint, so this list reflects invites created
@@ -31,6 +31,13 @@ export function HouseholdDashboard({
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [revokingId, setRevokingId] = useState<string | null>(null);
   const [deletingChildId, setDeletingChildId] = useState<string | null>(null);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
+  const [removeMemberError, setRemoveMemberError] = useState<string | null>(null);
+
+  const [transferTargetId, setTransferTargetId] = useState("");
+  const [transferStatus, setTransferStatus] = useState<"idle" | "submitting">("idle");
+  const [transferError, setTransferError] = useState<string | null>(null);
+  const [transferSuccess, setTransferSuccess] = useState<string | null>(null);
 
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteStatus, setInviteStatus] = useState<"idle" | "submitting">("idle");
@@ -94,6 +101,62 @@ export function HouseholdDashboard({
       }
     } finally {
       setRevokingId(null);
+    }
+  }
+
+  async function handleRemoveMember(member: HouseholdMember) {
+    setRemoveMemberError(null);
+    setRemovingMemberId(member.id);
+    try {
+      const response = await fetch(
+        `/api/households/${household.id}/members/${member.userId}`,
+        { method: "DELETE" },
+      );
+      if (response.ok || response.status === 204) {
+        setMembers((current) => current.filter((item) => item.id !== member.id));
+        return;
+      }
+      setRemoveMemberError(
+        response.status === 403
+          ? "Only the household owner can remove members."
+          : "We couldn't remove that member. Please try again.",
+      );
+    } catch {
+      setRemoveMemberError("We couldn't reach the server. Check your connection and try again.");
+    } finally {
+      setRemovingMemberId(null);
+    }
+  }
+
+  async function handleTransferOwnership(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!transferTargetId) {
+      setTransferError("Choose a member to become the new owner.");
+      return;
+    }
+
+    setTransferError(null);
+    setTransferSuccess(null);
+    setTransferStatus("submitting");
+
+    try {
+      const response = await fetch(`/api/households/${household.id}/transfer-ownership`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newOwnerId: transferTargetId }),
+      });
+
+      if (!response.ok) {
+        setTransferError("We couldn't transfer ownership. Please try again.");
+        return;
+      }
+
+      setTransferSuccess("Ownership transferred. Reload the page to see the updated roles.");
+      setTransferTargetId("");
+    } catch {
+      setTransferError("We couldn't reach the server. Check your connection and try again.");
+    } finally {
+      setTransferStatus("idle");
     }
   }
 
@@ -162,6 +225,12 @@ export function HouseholdDashboard({
             <span className="count">{members.length}</span>
           </div>
 
+          {removeMemberError && (
+            <p className="status-banner error" role="alert">
+              {removeMemberError}
+            </p>
+          )}
+
           {members.length === 0 ? (
             <p className="empty-state">No members yet.</p>
           ) : (
@@ -170,9 +239,56 @@ export function HouseholdDashboard({
                 <li key={member.id}>
                   <span>{memberLabel(member, currentUserId)}</span>
                   <span className={`role-badge ${member.role}`}>{member.role}</span>
+                  {isOwner && member.userId !== currentUserId && (
+                    <button
+                      type="button"
+                      className="icon-button danger"
+                      onClick={() => handleRemoveMember(member)}
+                      disabled={removingMemberId === member.id}
+                      aria-label={`Remove ${memberLabel(member, currentUserId)}`}
+                    >
+                      {removingMemberId === member.id ? "Removing…" : "Remove"}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
+          )}
+
+          {isOwner && members.some((member) => member.userId !== currentUserId) && (
+            <form onSubmit={handleTransferOwnership} className="stacked-form" noValidate>
+              <div className="field">
+                <label htmlFor="transfer-target">Transfer ownership to</label>
+                <select
+                  id="transfer-target"
+                  required
+                  value={transferTargetId}
+                  onChange={(event) => setTransferTargetId(event.target.value)}
+                >
+                  <option value="">Choose a member…</option>
+                  {members
+                    .filter((member) => member.userId !== currentUserId)
+                    .map((member) => (
+                      <option key={member.id} value={member.userId}>
+                        {memberLabel(member, currentUserId)}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              {transferError && (
+                <p className="status-banner error" role="alert">
+                  {transferError}
+                </p>
+              )}
+              {transferSuccess && (
+                <p className="status-banner success" role="status">
+                  {transferSuccess}
+                </p>
+              )}
+              <button type="submit" className="secondary" disabled={transferStatus === "submitting"}>
+                {transferStatus === "submitting" ? "Transferring…" : "Transfer ownership"}
+              </button>
+            </form>
           )}
 
           {isOwner && (
