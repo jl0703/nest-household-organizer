@@ -1,5 +1,6 @@
 package household.api.domain.calendar
 
+import household.api.domain.household.HouseholdException
 import household.api.domain.household.HouseholdMemberRepository
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
@@ -37,7 +38,7 @@ data class ModifyOccurrenceRequest(
     val overrideEndsAt: OffsetDateTime? = null,
 )
 
-class CalendarException(message: String) : RuntimeException(message)
+class CalendarException(message: String) : HouseholdException(message)
 
 @Singleton
 open class CalendarService(

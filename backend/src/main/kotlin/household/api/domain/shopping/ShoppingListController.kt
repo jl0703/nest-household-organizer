@@ -47,6 +47,12 @@ open class ShoppingListController(
         return shoppingListService.listLists(householdId, user.id)
     }
 
+    @Put("/{listId}")
+    open fun rename(authentication: Authentication, householdId: UUID, listId: UUID, @Body @Valid body: ShoppingListBody): ShoppingList {
+        val user = userService.resolveOrCreate(authentication)
+        return shoppingListService.renameList(listId, householdId, user.id, RenameShoppingListRequest(body.name))
+    }
+
     @Delete("/{listId}")
     open fun delete(authentication: Authentication, householdId: UUID, listId: UUID): HttpResponse<Unit> {
         val user = userService.resolveOrCreate(authentication)

@@ -4,10 +4,12 @@ import io.micronaut.data.annotation.DateCreated
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
+import io.micronaut.serde.annotation.Serdeable
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.UUID
 
+@Serdeable
 @MappedEntity("chores")
 data class Chore(
     @field:Id
@@ -34,6 +36,7 @@ data class Chore(
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 )
 
+@Serdeable
 @MappedEntity("chore_occurrences")
 data class ChoreOccurrence(
     @field:Id

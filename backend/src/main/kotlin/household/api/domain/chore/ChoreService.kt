@@ -1,6 +1,7 @@
 package household.api.domain.chore
 
 import household.api.domain.household.ChildProfileRepository
+import household.api.domain.household.HouseholdException
 import household.api.domain.household.HouseholdMemberRepository
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
@@ -21,7 +22,17 @@ data class CreateChoreRequest(
     val recurrenceEndDate: LocalDate? = null,
 )
 
-class ChoreException(message: String) : RuntimeException(message)
+data class UpdateChoreRequest(
+    val title: String,
+    val assigneeType: String,
+    val assigneeUserId: UUID? = null,
+    val assigneeChildId: UUID? = null,
+    val recurrenceFrequency: String = "none",
+    val recurrenceInterval: Int = 1,
+    val recurrenceEndDate: LocalDate? = null,
+)
+
+class ChoreException(message: String) : HouseholdException(message)
 
 @Singleton
 open class ChoreService(
@@ -56,6 +67,25 @@ open class ChoreService(
     fun listChores(householdId: UUID, actorId: UUID): List<Chore> {
         assertMember(householdId, actorId)
         return choreRepository.findByHouseholdId(householdId)
+    }
+
+    @Transactional
+    open fun updateChore(choreId: UUID, householdId: UUID, actorId: UUID, request: UpdateChoreRequest): Chore {
+        assertMember(householdId, actorId)
+        val chore = findChoreInHousehold(choreId, householdId)
+        validateRecurrence(request.recurrenceFrequency, request.recurrenceInterval)
+        validateAssignee(householdId, request.assigneeType, request.assigneeUserId, request.assigneeChildId)
+        return choreRepository.update(
+            chore.copy(
+                title = request.title,
+                assigneeType = request.assigneeType,
+                assigneeUserId = request.assigneeUserId,
+                assigneeChildId = request.assigneeChildId,
+                recurrenceFrequency = request.recurrenceFrequency,
+                recurrenceInterval = request.recurrenceInterval,
+                recurrenceEndDate = request.recurrenceEndDate,
+            )
+        )
     }
 
     fun listOccurrences(choreId: UUID, householdId: UUID, actorId: UUID): List<ChoreOccurrence> {

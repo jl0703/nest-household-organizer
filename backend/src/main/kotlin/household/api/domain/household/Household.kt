@@ -4,9 +4,11 @@ import io.micronaut.data.annotation.DateCreated
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
+import io.micronaut.serde.annotation.Serdeable
 import java.time.OffsetDateTime
 import java.util.UUID
 
+@Serdeable
 @MappedEntity("households")
 data class Household(
     @field:Id
@@ -20,6 +22,7 @@ data class Household(
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 )
 
+@Serdeable
 @MappedEntity("household_members")
 data class HouseholdMember(
     @field:Id
@@ -33,6 +36,7 @@ data class HouseholdMember(
     val joinedAt: OffsetDateTime = OffsetDateTime.now(),
 )
 
+@Serdeable
 @MappedEntity("child_profiles")
 data class ChildProfile(
     @field:Id
@@ -47,6 +51,7 @@ data class ChildProfile(
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 )
 
+@Serdeable
 @MappedEntity("invitations")
 data class Invitation(
     @field:Id

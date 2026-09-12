@@ -25,6 +25,17 @@ data class ChoreBody(
     val recurrenceEndDate: LocalDate? = null,
 )
 
+@Serdeable
+data class UpdateChoreBody(
+    @field:NotBlank @field:Size(max = 200) val title: String,
+    @field:NotBlank val assigneeType: String,
+    val assigneeUserId: UUID? = null,
+    val assigneeChildId: UUID? = null,
+    val recurrenceFrequency: String = "none",
+    val recurrenceInterval: Int = 1,
+    val recurrenceEndDate: LocalDate? = null,
+)
+
 @Controller("/api/households/{householdId}/chores")
 @Secured(SecurityRule.IS_AUTHENTICATED)
 open class ChoreController(
@@ -55,6 +66,25 @@ open class ChoreController(
     open fun list(authentication: Authentication, householdId: UUID): List<Chore> {
         val user = userService.resolveOrCreate(authentication)
         return choreService.listChores(householdId, user.id)
+    }
+
+    @Put("/{choreId}")
+    open fun update(authentication: Authentication, householdId: UUID, choreId: UUID, @Body @Valid body: UpdateChoreBody): Chore {
+        val user = userService.resolveOrCreate(authentication)
+        return choreService.updateChore(
+            choreId,
+            householdId,
+            user.id,
+            UpdateChoreRequest(
+                title = body.title,
+                assigneeType = body.assigneeType,
+                assigneeUserId = body.assigneeUserId,
+                assigneeChildId = body.assigneeChildId,
+                recurrenceFrequency = body.recurrenceFrequency,
+                recurrenceInterval = body.recurrenceInterval,
+                recurrenceEndDate = body.recurrenceEndDate,
+            )
+        )
     }
 
     @Get("/{choreId}/occurrences")

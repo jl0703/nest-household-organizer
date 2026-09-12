@@ -4,10 +4,12 @@ import io.micronaut.data.annotation.DateCreated
 import io.micronaut.data.annotation.Id
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
+import io.micronaut.serde.annotation.Serdeable
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.UUID
 
+@Serdeable
 @MappedEntity("calendar_events")
 data class CalendarEvent(
     @field:Id
@@ -35,6 +37,7 @@ data class CalendarEvent(
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 )
 
+@Serdeable
 @MappedEntity("event_occurrence_overrides")
 data class EventOccurrenceOverride(
     @field:Id

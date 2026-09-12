@@ -1,11 +1,13 @@
 package household.api.domain.shopping
 
+import household.api.domain.household.HouseholdException
 import household.api.domain.household.HouseholdMemberRepository
 import io.micronaut.transaction.annotation.Transactional
 import jakarta.inject.Singleton
 import java.util.UUID
 
 data class CreateShoppingListRequest(val name: String)
+data class RenameShoppingListRequest(val name: String)
 data class CreateShoppingItemRequest(
     val name: String,
     val quantity: String? = null,
@@ -18,7 +20,7 @@ data class UpdateShoppingItemRequest(
     val checked: Boolean = false,
 )
 
-class ShoppingListException(message: String) : RuntimeException(message)
+class ShoppingListException(message: String) : HouseholdException(message)
 
 @Singleton
 open class ShoppingListService(
@@ -37,6 +39,13 @@ open class ShoppingListService(
     fun listLists(householdId: UUID, actorId: UUID): List<ShoppingList> {
         assertMember(householdId, actorId)
         return listRepository.findByHouseholdId(householdId)
+    }
+
+    @Transactional
+    open fun renameList(listId: UUID, householdId: UUID, actorId: UUID, request: RenameShoppingListRequest): ShoppingList {
+        assertMember(householdId, actorId)
+        val list = findListInHousehold(listId, householdId)
+        return listRepository.update(list.copy(name = request.name))
     }
 
     @Transactional
