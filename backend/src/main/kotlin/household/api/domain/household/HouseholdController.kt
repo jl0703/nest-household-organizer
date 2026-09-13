@@ -11,12 +11,41 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import java.time.OffsetDateTime
 import java.util.UUID
 
 @Serdeable data class CreateHouseholdBody(@field:NotBlank @field:Size(max = 120) val name: String, val timezone: String = "UTC")
 @Serdeable data class InviteBody(@field:Email @field:NotBlank val recipientEmail: String)
 @Serdeable data class TransferOwnershipBody(val newOwnerId: UUID)
 @Serdeable data class CreateChildProfileBody(@field:NotBlank @field:Size(max = 80) val displayName: String)
+
+// Deliberately omits the secret acceptance `token`, which is only ever
+// delivered out-of-band (e.g. by email) to the invited recipient, never
+// echoed back to the inviting owner's browser session.
+@Serdeable
+data class InvitationResponse(
+    val id: UUID,
+    val householdId: UUID,
+    val invitedById: UUID,
+    val recipientEmail: String,
+    val status: String,
+    val expiresAt: OffsetDateTime,
+    val createdAt: OffsetDateTime,
+    val resolvedAt: OffsetDateTime?,
+) {
+    companion object {
+        fun from(invitation: Invitation) = InvitationResponse(
+            id = invitation.id,
+            householdId = invitation.householdId,
+            invitedById = invitation.invitedById,
+            recipientEmail = invitation.recipientEmail,
+            status = invitation.status,
+            expiresAt = invitation.expiresAt,
+            createdAt = invitation.createdAt,
+            resolvedAt = invitation.resolvedAt,
+        )
+    }
+}
 
 @Controller("/api")
 @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -63,9 +92,10 @@ open class HouseholdController(
     }
 
     @Post("/households/{householdId}/invitations")
-    open fun invite(authentication: Authentication, householdId: UUID, @Body @Valid body: InviteBody): HttpResponse<Invitation> {
+    open fun invite(authentication: Authentication, householdId: UUID, @Body @Valid body: InviteBody): HttpResponse<InvitationResponse> {
         val user = userService.resolveOrCreate(authentication)
-        return HttpResponse.created(householdService.inviteMember(householdId, user.id, InviteRequest(body.recipientEmail)))
+        val invitation = householdService.inviteMember(householdId, user.id, InviteRequest(body.recipientEmail))
+        return HttpResponse.created(InvitationResponse.from(invitation))
     }
 
     @Post("/invitations/{token}/accept")

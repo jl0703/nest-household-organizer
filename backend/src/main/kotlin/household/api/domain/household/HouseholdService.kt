@@ -12,7 +12,7 @@ data class InviteRequest(val recipientEmail: String)
 data class TransferOwnershipRequest(val newOwnerId: UUID)
 data class CreateChildProfileRequest(val displayName: String)
 
-class HouseholdException(message: String) : RuntimeException(message)
+open class HouseholdException(message: String) : RuntimeException(message)
 
 @Singleton
 open class HouseholdService(
