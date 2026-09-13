@@ -24,3 +24,11 @@ flyway:
 
 supabase:
   jwt-secret: "${SUPABASE_JWT_SECRET:replace-me-with-your-supabase-jwt-secret}"
+
+notifications:
+  scheduling:
+    enabled: "${NOTIFICATION_SCHEDULING_ENABLED:true}"
+    fixed-delay: "${NOTIFICATION_SCHEDULING_FIXED_DELAY:1m}"
+    initial-delay: "${NOTIFICATION_SCHEDULING_INITIAL_DELAY:1m}"
+    recovery-lookback: "${NOTIFICATION_SCHEDULING_RECOVERY_LOOKBACK:1h}"
+    lookahead: "${NOTIFICATION_SCHEDULING_LOOKAHEAD:1m}"
