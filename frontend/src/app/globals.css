@@ -56,4 +56,13 @@ nav b { float:right; display:grid; place-items:center; min-width:21px; height:21
 .stacked-form { margin-top:auto; padding-top:16px; border-top:1px solid var(--line); }
 .icon-button { border:1px solid var(--line); border-radius:8px; padding:6px 11px; background:transparent; font-size:12px; font-weight:700; color:var(--ink); flex:0 0 auto; }
 .icon-button.danger { border-color:#e2b5ab; color:#a8402e; }
+.event-list { list-style:none; margin:0 0 18px; padding:0; display:grid; gap:10px; }
+.event-list > li { padding:10px 0; border-top:1px solid var(--line); font-size:14px; }
+.event-list > li:first-child { border-top:0; padding-top:0; }
+.event-list-main { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.event-list-main small { display:block; margin-top:2px; color:var(--muted); font-size:11px; }
+.event-list-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.occurrence-panel { margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); }
+.occurrence-list { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:6px; }
+.occurrence-list li { display:flex; align-items:center; justify-content:space-between; font-size:13px; }
 @media (max-width:760px) { .household-grid { grid-template-columns:1fr; } }
