@@ -84,3 +84,52 @@ export interface ModifyOccurrenceBody {
   overrideStartsAt?: string;
   overrideEndsAt?: string;
 }
+
+export type ChoreAssigneeType = "adult" | "child";
+
+export interface Chore {
+  id: string;
+  householdId: string;
+  title: string;
+  assigneeType: ChoreAssigneeType;
+  assigneeUserId: string | null;
+  assigneeChildId: string | null;
+  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceInterval: number;
+  recurrenceEndDate: string | null;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface ChoreBody {
+  title: string;
+  assigneeType: ChoreAssigneeType;
+  assigneeUserId?: string;
+  assigneeChildId?: string;
+  firstDueDate: string;
+  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceInterval: number;
+  recurrenceEndDate?: string;
+}
+
+export interface UpdateChoreBody {
+  title: string;
+  assigneeType: ChoreAssigneeType;
+  assigneeUserId?: string;
+  assigneeChildId?: string;
+  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceInterval: number;
+  recurrenceEndDate?: string;
+}
+
+export type ChoreOccurrenceStatus = "pending" | "completed" | "skipped";
+
+export interface ChoreOccurrence {
+  id: string;
+  choreId: string;
+  dueDate: string;
+  status: ChoreOccurrenceStatus;
+  completedAt: string | null;
+  completedBy: string | null;
+  createdAt: string;
+}

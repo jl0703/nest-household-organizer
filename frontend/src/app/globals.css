@@ -64,5 +64,11 @@ nav b { float:right; display:grid; place-items:center; min-width:21px; height:21
 .event-list-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
 .occurrence-panel { margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); }
 .occurrence-list { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:6px; }
-.occurrence-list li { display:flex; align-items:center; justify-content:space-between; font-size:13px; }
+.occurrence-list li { display:flex; align-items:center; justify-content:space-between; font-size:13px; gap:8px; }
+.chore-list { list-style:none; margin:0 0 18px; padding:0; display:grid; gap:10px; }
+.chore-list > li { padding:10px 0; border-top:1px solid var(--line); font-size:14px; }
+.chore-list > li:first-child { border-top:0; padding-top:0; }
+.chore-list-main { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.chore-list-main small { display:block; margin-top:2px; color:var(--muted); font-size:11px; }
+.chore-list-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
 @media (max-width:760px) { .household-grid { grid-template-columns:1fr; } }

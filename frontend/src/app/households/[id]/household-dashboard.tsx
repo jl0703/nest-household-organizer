@@ -2,14 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import type { CalendarEvent, ChildProfile, Household, HouseholdMember, Invitation } from "@/lib/types";
+import type { CalendarEvent, ChildProfile, Chore, Household, HouseholdMember, Invitation } from "@/lib/types";
 import { CalendarPanel } from "./calendar-panel";
+import { ChoresPanel } from "./chores-panel";
 
 interface HouseholdDashboardProps {
   household: Household;
   initialMembers: HouseholdMember[];
   initialChildren: ChildProfile[];
   initialEvents: CalendarEvent[];
+  initialChores: Chore[];
   currentUserId: string;
 }
 
@@ -23,6 +25,7 @@ export function HouseholdDashboard({
   initialMembers,
   initialChildren,
   initialEvents,
+  initialChores,
   currentUserId,
 }: HouseholdDashboardProps) {
   const router = useRouter();
@@ -420,6 +423,14 @@ export function HouseholdDashboard({
         </section>
 
         <CalendarPanel householdId={household.id} initialEvents={initialEvents} />
+
+        <ChoresPanel
+          householdId={household.id}
+          initialChores={initialChores}
+          members={members}
+          childProfiles={children}
+          currentUserId={currentUserId}
+        />
       </div>
     </main>
   );
