@@ -1,7 +1,14 @@
 import { notFound, redirect } from "next/navigation";
 import { BackendApiError, UnauthorizedError, backendJson } from "@/lib/api/backend";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { CalendarEvent, ChildProfile, Chore, Household, HouseholdMember } from "@/lib/types";
+import type {
+  CalendarEvent,
+  ChildProfile,
+  Chore,
+  Household,
+  HouseholdMember,
+  ShoppingList,
+} from "@/lib/types";
 import { HouseholdDashboard } from "./household-dashboard";
 
 export default async function HouseholdPage({
@@ -26,14 +33,16 @@ export default async function HouseholdPage({
   let children: ChildProfile[];
   let events: CalendarEvent[];
   let chores: Chore[];
+  let shoppingLists: ShoppingList[];
 
   try {
-    [household, members, children, events, chores] = await Promise.all([
+    [household, members, children, events, chores, shoppingLists] = await Promise.all([
       backendJson<Household>(`/households/${id}`),
       backendJson<HouseholdMember[]>(`/households/${id}/members`),
       backendJson<ChildProfile[]>(`/households/${id}/children`),
       backendJson<CalendarEvent[]>(`/households/${id}/events`),
       backendJson<Chore[]>(`/households/${id}/chores`),
+      backendJson<ShoppingList[]>(`/households/${id}/shopping-lists`),
     ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) {
@@ -59,6 +68,7 @@ export default async function HouseholdPage({
       initialChildren={children}
       initialEvents={events}
       initialChores={chores}
+      initialShoppingLists={shoppingLists}
       currentUserId={user.id}
     />
   );

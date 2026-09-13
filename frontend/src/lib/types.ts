@@ -133,3 +133,39 @@ export interface ChoreOccurrence {
   completedBy: string | null;
   createdAt: string;
 }
+
+export interface ShoppingList {
+  id: string;
+  householdId: string;
+  name: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface ShoppingListBody {
+  name: string;
+}
+
+export interface ShoppingItem {
+  id: string;
+  listId: string;
+  name: string;
+  quantity: string | null;
+  category: string | null;
+  checked: boolean;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface ShoppingItemBody {
+  name: string;
+  quantity?: string;
+  category?: string;
+}
+
+export interface UpdateShoppingItemBody {
+  name: string;
+  quantity?: string;
+  category?: string;
+  checked: boolean;
+}

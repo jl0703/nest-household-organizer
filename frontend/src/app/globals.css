@@ -71,4 +71,13 @@ nav b { float:right; display:grid; place-items:center; min-width:21px; height:21
 .chore-list-main { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .chore-list-main small { display:block; margin-top:2px; color:var(--muted); font-size:11px; }
 .chore-list-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.shopping-list { list-style:none; margin:0 0 18px; padding:0; display:grid; gap:10px; }
+.shopping-list > li { padding:10px 0; border-top:1px solid var(--line); font-size:14px; }
+.shopping-list > li:first-child { border-top:0; padding-top:0; }
+.shopping-list-main { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.shopping-list-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.shopping-item-panel { margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); }
+.shopping-item-list { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:8px; }
+.shopping-item-list > li { display:flex; align-items:center; gap:11px; }
+.shopping-item-actions { display:flex; gap:8px; margin-left:auto; }
 @media (max-width:760px) { .household-grid { grid-template-columns:1fr; } }
