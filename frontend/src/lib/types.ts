@@ -37,3 +37,50 @@ export interface ChildProfile {
   displayName: string;
   createdAt: string;
 }
+
+export type RecurrenceFrequency = "none" | "daily" | "weekly" | "monthly" | "yearly";
+
+export interface CalendarEvent {
+  id: string;
+  householdId: string;
+  title: string;
+  description: string | null;
+  allDay: boolean;
+  startsAt: string;
+  endsAt: string;
+  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceInterval: number;
+  recurrenceEndDate: string | null;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface EventBody {
+  title: string;
+  description?: string;
+  allDay: boolean;
+  startsAt: string;
+  endsAt: string;
+  recurrenceFrequency: RecurrenceFrequency;
+  recurrenceInterval: number;
+  recurrenceEndDate?: string;
+}
+
+export type OccurrenceOverrideStatus = "skipped" | "modified";
+
+export interface EventOccurrenceOverride {
+  id: string;
+  eventId: string;
+  occurrenceDate: string;
+  status: OccurrenceOverrideStatus;
+  overrideStartsAt: string | null;
+  overrideEndsAt: string | null;
+  overrideTitle: string | null;
+  createdAt: string;
+}
+
+export interface ModifyOccurrenceBody {
+  overrideTitle?: string;
+  overrideStartsAt?: string;
+  overrideEndsAt?: string;
+}
