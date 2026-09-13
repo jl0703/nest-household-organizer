@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 
 type Chore = { id: number; name: string; assignee: string; done: boolean };
@@ -44,20 +45,20 @@ export default function Home() {
           <a href="#lists">Lists</a>
         </nav>
         <div className="household">
-          <p>THE HOLLOWAYS</p>
-          <strong>4 members</strong>
-          <button type="button">Manage home</button>
+          <p>SAMPLE HOUSEHOLD</p>
+          <strong>Sign in to see yours</strong>
+          <Link href="/login">Sign in</Link>
         </div>
       </aside>
 
       <section className="content" id="top">
         <header className="topbar">
-          <div><p className="eyebrow">TUESDAY, SEPTEMBER 12</p><h1>Good morning, Alex.</h1></div>
-          <div className="actions"><button className="quiet" type="button">Notifications</button><button className="avatar" type="button" aria-label="Open profile">A</button></div>
+          <div><p className="eyebrow">A CALMER HOUSEHOLD</p><h1>Good morning.</h1></div>
+          <div className="actions"><Link className="quiet" href="/login">Sign in</Link><Link className="avatar" href="/signup" aria-label="Create an account">+</Link></div>
         </header>
 
         <section className="overview" id="today" aria-labelledby="today-heading">
-          <div className="overview-copy"><p className="eyebrow">YOUR HOUSEHOLD, IN RHYTHM</p><h2 id="today-heading">A little structure<br />for the good stuff.</h2><p>Three things to tend to, one place to see the day.</p><button className="primary" type="button">Plan something new <span>→</span></button></div>
+          <div className="overview-copy"><p className="eyebrow">YOUR HOUSEHOLD, IN RHYTHM</p><h2 id="today-heading">A little structure<br />for the good stuff.</h2><p>Three things to tend to, one place to see the day. This preview uses sample data &mdash; sign in to manage your real household.</p><Link className="primary" href="/households/new">Create your household <span>→</span></Link></div>
           <div className="date-tile" aria-label="Tuesday September 12"><span>TUE</span><strong>12</strong><em>September</em></div>
         </section>
 
