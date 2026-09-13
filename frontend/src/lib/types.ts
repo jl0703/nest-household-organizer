@@ -134,6 +134,17 @@ export interface ChoreOccurrence {
   createdAt: string;
 }
 
+export interface NotificationPreference {
+  id: string;
+  householdId: string;
+  userId: string;
+  dailyDigestEnabled: boolean;
+  eventRemindersEnabled: boolean;
+  choreRemindersEnabled: boolean;
+  digestTime: string;
+  updatedAt: string;
+}
+
 export interface ShoppingList {
   id: string;
   householdId: string;

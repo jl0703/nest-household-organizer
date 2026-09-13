@@ -9,10 +9,12 @@ import type {
   Household,
   HouseholdMember,
   Invitation,
+  NotificationPreference,
   ShoppingList,
 } from "@/lib/types";
 import { CalendarPanel } from "./calendar-panel";
 import { ChoresPanel } from "./chores-panel";
+import { NotificationPreferencesPanel } from "./notification-preferences-panel";
 import { ShoppingListsPanel } from "./shopping-lists-panel";
 
 interface HouseholdDashboardProps {
@@ -22,6 +24,7 @@ interface HouseholdDashboardProps {
   initialEvents: CalendarEvent[];
   initialChores: Chore[];
   initialShoppingLists: ShoppingList[];
+  initialNotificationPreference: NotificationPreference;
   currentUserId: string;
 }
 
@@ -37,6 +40,7 @@ export function HouseholdDashboard({
   initialEvents,
   initialChores,
   initialShoppingLists,
+  initialNotificationPreference,
   currentUserId,
 }: HouseholdDashboardProps) {
   const router = useRouter();
@@ -444,6 +448,11 @@ export function HouseholdDashboard({
         />
 
         <ShoppingListsPanel householdId={household.id} initialShoppingLists={initialShoppingLists} />
+
+        <NotificationPreferencesPanel
+          householdId={household.id}
+          initialPreference={initialNotificationPreference}
+        />
       </div>
     </main>
   );

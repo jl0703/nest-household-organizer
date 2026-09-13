@@ -80,4 +80,10 @@ nav b { float:right; display:grid; place-items:center; min-width:21px; height:21
 .shopping-item-list { list-style:none; margin:0 0 12px; padding:0; display:grid; gap:8px; }
 .shopping-item-list > li { display:flex; align-items:center; gap:11px; }
 .shopping-item-actions { display:flex; gap:8px; margin-left:auto; }
+.notification-preferences-form { display:grid; gap:12px; }
+.preference-toggle { display:flex; align-items:center; gap:10px; font-size:14px; }
+.preference-toggle input { width:18px; height:18px; accent-color:var(--leaf); }
+.preference-toggle input:focus-visible { outline:2px solid var(--leaf); outline-offset:2px; }
+.notification-preferences-form .field { margin:4px 0 0; }
+.form-help { margin:-5px 0 2px; color:var(--muted); font-size:12px; }
 @media (max-width:760px) { .household-grid { grid-template-columns:1fr; } }
