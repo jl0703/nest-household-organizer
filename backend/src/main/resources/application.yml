@@ -1,8 +1,23 @@
 micronaut:
   application:
     name: household-api
+  http:
+    services:
+      supabase:
+        url: "${supabase.url}"
+        connect-timeout: 5s
+        read-timeout: 5s
   security:
     authentication: bearer
+    token:
+      jwt:
+        signatures:
+          jwks:
+            supabase:
+              url: /auth/v1/.well-known/jwks.json
+        claims-validators:
+          issuer: "${supabase.url}/auth/v1"
+          audience: authenticated
   server:
     cors:
       enabled: true
@@ -23,4 +38,4 @@ flyway:
       enabled: true
 
 supabase:
-  jwt-secret: "${SUPABASE_JWT_SECRET:replace-me-with-your-supabase-jwt-secret}"
+  url: "${SUPABASE_URL}"

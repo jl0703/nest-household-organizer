@@ -22,7 +22,7 @@ services:
       JDBC_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-household}
       DB_USER: ${POSTGRES_USER:-household}
       DB_PASSWORD: ${POSTGRES_PASSWORD:-household}
-      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:-replace-me-with-your-supabase-jwt-secret}
+      SUPABASE_URL: ${SUPABASE_URL}
       FRONTEND_ORIGIN: http://localhost:3000
     ports:
       - "8080:8080"
