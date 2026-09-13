@@ -7,6 +7,7 @@ import type {
   Chore,
   Household,
   HouseholdMember,
+  NotificationPreference,
   ShoppingList,
 } from "@/lib/types";
 import { HouseholdDashboard } from "./household-dashboard";
@@ -34,15 +35,17 @@ export default async function HouseholdPage({
   let events: CalendarEvent[];
   let chores: Chore[];
   let shoppingLists: ShoppingList[];
+  let notificationPreference: NotificationPreference;
 
   try {
-    [household, members, children, events, chores, shoppingLists] = await Promise.all([
+    [household, members, children, events, chores, shoppingLists, notificationPreference] = await Promise.all([
       backendJson<Household>(`/households/${id}`),
       backendJson<HouseholdMember[]>(`/households/${id}/members`),
       backendJson<ChildProfile[]>(`/households/${id}/children`),
       backendJson<CalendarEvent[]>(`/households/${id}/events`),
       backendJson<Chore[]>(`/households/${id}/chores`),
       backendJson<ShoppingList[]>(`/households/${id}/shopping-lists`),
+      backendJson<NotificationPreference>(`/households/${id}/notification-preferences`),
     ]);
   } catch (err) {
     if (err instanceof UnauthorizedError) {
@@ -69,6 +72,7 @@ export default async function HouseholdPage({
       initialEvents={events}
       initialChores={chores}
       initialShoppingLists={shoppingLists}
+      initialNotificationPreference={notificationPreference}
       currentUserId={user.id}
     />
   );
