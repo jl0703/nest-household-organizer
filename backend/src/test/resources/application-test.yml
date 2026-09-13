@@ -1,3 +1,6 @@
+supabase:
+  url: http://127.0.0.1:9
+
 notifications:
   scheduling:
     enabled: false
